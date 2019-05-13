@@ -1,0 +1,25 @@
+#title {
+    color: blue;
+    text-align: center;
+}
+
+.title2 {
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+    color: green;
+}
+
+p {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+p::first-letter {
+    size: 18px;
+    font-weight: bold;
+}
+
+.last2 {
+    font-style: italic;
+}
