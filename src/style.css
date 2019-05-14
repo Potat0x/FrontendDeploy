@@ -1,25 +1,18 @@
-#title {
-    color: blue;
-    text-align: center;
+body {
+    font-family: 'Ubuntu', sans-serif;
 }
 
-.title2 {
-    font-weight: bold;
+.product {
+    /* background: red; */
+    border-bottom: 1px solid grey;
+    padding: 8px 0;
+}
+
+.product-title {
+    margin: 0;
+}
+
+.product-description {
     font-style: italic;
-    text-decoration: underline;
-    color: green;
-}
-
-p {
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-p::first-letter {
-    size: 18px;
-    font-weight: bold;
-}
-
-.last2 {
-    font-style: italic;
+    font-size: 11px;
 }
