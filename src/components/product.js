@@ -18,8 +18,11 @@ const priceMapper = (price) => {
 
 function renderProduct(product) {
     return `<div class="product">
-                <h2 class="product-title">${product.name}</h2>
-                <div>${priceMapper(product.price)}</div>
-                <div class="product-description">${product.description.text}</div>
+                <img class="product-image" src="${product.image.url}"/>
+                    <div class="product-info">
+                        <h2 class="product-title">${product.name}</h2>
+                        <div>${priceMapper(product.price)}</div>
+                    <div class="product-description">${product.description.text}</div>
+                </div>
             </div>`;
 }

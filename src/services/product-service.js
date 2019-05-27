@@ -1,4 +1,21 @@
 function getProductList() {
+    // const url = "https://sampletext897123.herokuapp.com/products";
+    return Promise.resolve(getProductListDeprecated());
+    return fetch(url)
+        .then(response => {
+            console.log(response);
+            return response.json();
+        })
+        .then(json => {
+            console.log(json);
+            return json;
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+function getProductListDeprecated() {
     return {
         "products": [
             {
