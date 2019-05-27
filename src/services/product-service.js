@@ -1,6 +1,6 @@
 function getProductList() {
-    // const url = "https://sampletext897123.herokuapp.com/products";
-    return Promise.resolve(getProductListDeprecated());
+    const url = "https://sampletext897123.herokuapp.com/products";
+    // return Promise.resolve(getProductListDeprecated());
     return fetch(url)
         .then(response => {
             console.log(response);
