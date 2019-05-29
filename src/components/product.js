@@ -19,10 +19,20 @@ const priceMapper = (price) => {
 function renderProduct(product) {
     return `<div class="product">
                 <img class="product-image" src="${product.image.url}"/>
-                    <div class="product-info">
+                <div class="product-info">
                         <h2 class="product-title">${product.name}</h2>
-                        <div>${priceMapper(product.price)}</div>
-                    <div class="product-description">${product.description.text}</div>
-                </div>
-            </div>`;
+                        <div>${priceMapper(product.price)}
+                        </div>
+                    <div class="product-description">
+                    ${product.description.text}
+                    <br>
+                        <div class="product-tags">
+                            ${product.tags.length > 0 ? ("tagi: " + product.tags
+                                .map((tag) => tag.name)
+                                .reduce((a, b) => a + ", " + b)) : ""
+                            }
+                        </div>
+                    </div >
+                </div >
+            </div > `;
 }

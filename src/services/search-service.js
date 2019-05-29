@@ -15,3 +15,18 @@ function searchByPrice(min, max, productList) {
             && compare(amount, greaterThanOrEqual, min);
     });
 }
+
+function searchByTags(productList) {
+    const selectedTags = getSelectedTags();
+    return productList.filter((product) => checkIfProductContainsAllTags(product, selectedTags));
+}
+
+function checkIfProductContainsAllTags(product, selectedTags) {
+    const productTags = product.tags.map((tag) => tag.name);
+    for (const tag of selectedTags) {
+        if (!productTags.includes(tag)) {
+            return false;
+        }
+    }
+    return true;
+}

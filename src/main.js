@@ -1,5 +1,3 @@
-getProductList().then(response => addProductsToListing(response.products));
-
 function clearProductListing() {
     const listingElement = document.querySelector("#listing");
     listingElement.innerHTML = "";
@@ -37,6 +35,8 @@ function filterProductList(products) {
         filteredList = searchByPrice(minPrice, maxPrice, filteredList);
     }
 
+    filteredList = searchByTags(filteredList);
+
     return filteredList;
 }
 
@@ -56,6 +56,36 @@ function sortProductList(products) {
     }
 }
 
+function renderTagCheckbox(tagName) {
+    return `<div>
+                <input type="checkbox" name="${tagName}" value="${tagName}" class="tagCheckbox">
+                ${tagName}
+            </div>`;
+}
+
+function getSelectedTags() {
+    const tagCheckboxes = document.getElementsByClassName("tagCheckbox");
+    return Array.from(tagCheckboxes)
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.value);
+}
+
+function getAllTagsFromProducts() {
+    return Array.from(
+        new Set(getProductListDeprecated().products
+            .map((product) => product.tags)
+            .reduce((a, b) => a.concat(b))
+            .map((tag) => tag.name))
+    );
+}
+
+function insertTagCheckboxes() {
+    const tags = getAllTagsFromProducts();
+    const tagsHtml = tags.map(tag => renderTagCheckbox(tag));
+    const tagListElement = document.getElementById("tagList");
+    tagListElement.innerHTML += tagsHtml.reduce((a, b) => a + b);
+}
+
 function applyUserPreferences() {
     const rawProductList = getProductListDeprecated().products;
     const filteredProductList = filterProductList(rawProductList);
@@ -65,7 +95,18 @@ function applyUserPreferences() {
     addProductsToListing(sortedProductList);
 }
 
-(function addEventListeners() {
+function addEventListeners() {
     ["min-price", "max-price", "search-input", "sort-dropdown"]
         .forEach((id) => document.getElementById(id).addEventListener('input', applyUserPreferences));
-})();
+
+    const tagElements = document.getElementsByClassName("tagCheckbox");
+    for (const tagElement of tagElements) {
+        tagElement.addEventListener('input', applyUserPreferences);
+    }
+};
+
+getProductList().then(response => {
+    addProductsToListing(response.products);
+    insertTagCheckboxes();
+    addEventListeners();
+});
