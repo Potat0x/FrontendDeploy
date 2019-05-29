@@ -26,9 +26,9 @@ function isPriceRangeValid(min, max) {
     }
 }
 
-function filterProductListing() {
+function filterProductList(products) {
     const name = document.getElementById("search-input").value;
-    let filteredList = searchByName(name, getProductListDeprecated().products);
+    let filteredList = searchByName(name, products);
 
     const minPrice = document.getElementById("min-price").value;
     const maxPrice = document.getElementById("max-price").value;
@@ -37,12 +37,35 @@ function filterProductListing() {
         filteredList = searchByPrice(minPrice, maxPrice, filteredList);
     }
 
+    return filteredList;
+}
+
+function sortProductList(products) {
+    const sortType = document.getElementById("sort-dropdown").value;
+    if (sortType === "default") {
+        return products;
+    } else {
+        const sortTypeToComparator = {
+            "descend": (a, b) => b - a,
+            "ascend": (a, b) => a - b,
+        };
+
+        return sortedProductList = products.sort((p1, p2) => {
+            return sortTypeToComparator[sortType](Number(p1.price.amount), Number(p2.price.amount));
+        });
+    }
+}
+
+function applyUserPreferences() {
+    const rawProductList = getProductListDeprecated().products;
+    const filteredProductList = filterProductList(rawProductList);
+    const sortedProductList = sortProductList(filteredProductList);
+
     clearProductListing();
-    addProductsToListing(filteredList);
+    addProductsToListing(sortedProductList);
 }
 
 (function addEventListeners() {
-    document.getElementById("min-price").addEventListener('input', filterProductListing);
-    document.getElementById("max-price").addEventListener('input', filterProductListing);
-    document.getElementById("search-input").addEventListener('input', filterProductListing);
+    ["min-price", "max-price", "search-input", "sort-dropdown"]
+        .forEach((id) => document.getElementById(id).addEventListener('input', applyUserPreferences));
 })();
