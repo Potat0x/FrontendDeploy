@@ -6,7 +6,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
+        <script src="utils.js"></script>
         <script src="services/product-service.js"></script>
+        <script src="services/search-service.js"></script>
         <script src="components/product.js"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
@@ -14,6 +16,14 @@
 
 <body>
         <div class="container">
+                <section class="card">
+                        <input type="text" id="search-input" placeholder="nazwa">
+                        <div id="price-inputs">
+                                <input type="text" id="min-price" placeholder="cena od">
+                                <input type="text" id="max-price" placeholder="cena do">
+                        </div>
+                        <button id="search-button">Szukaj</button>
+                </section>
                 <section id="listing">
                 </section>
         </div>
