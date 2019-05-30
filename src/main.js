@@ -9,6 +9,11 @@ function addProductsToListing(products) {
     productsHtml.forEach((prodHtml) => listingElement.innerHTML += prodHtml);
 }
 
+function displayProductsNotFoundMessage() {
+    const listingElement = document.querySelector("#listing");
+    listingElement.innerHTML = `<p id="products-not-found">Nie znaleziono produktów o podanych parametrach</p>`;
+}
+
 function isPriceRangeValid(min, max) {
     const isMinPriceInputValid = isValidNumberOrEmpty(min);
     const isMaxPriceInputValid = isValidNumberOrEmpty(max);
@@ -92,7 +97,11 @@ function applyUserPreferences() {
     const sortedProductList = sortProductList(filteredProductList);
 
     clearProductListing();
-    addProductsToListing(sortedProductList);
+    if (sortedProductList.length > 0) {
+        addProductsToListing(sortedProductList);
+    } else {
+        displayProductsNotFoundMessage();
+    }
 }
 
 function addEventListeners() {

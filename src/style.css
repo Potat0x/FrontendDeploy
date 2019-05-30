@@ -68,3 +68,10 @@ body {
     grid-column: 1/3;
     grid-template-columns: 1fr 1fr;
 }
+
+#products-not-found {
+    padding: 20px;
+    font-style: italic;
+    font-size: 11px;
+    color: rgb(32, 32, 32);
+}
