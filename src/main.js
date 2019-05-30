@@ -1,17 +1,21 @@
+function setListingInnerHtml(innerHtml) {
+    document.getElementById("listing").innerHTML = innerHtml;
+}
+
 function clearProductListing() {
-    const listingElement = document.querySelector("#listing");
-    listingElement.innerHTML = "";
+    setListingInnerHtml("");
 }
 
 function addProductsToListing(products) {
-    const productsHtml = products.map((product) => renderProduct(product));
-    const listingElement = document.querySelector("#listing");
-    productsHtml.forEach((prodHtml) => listingElement.innerHTML += prodHtml);
+    const productsHtml = products
+        .map((product) => renderProduct(product))
+        .reduce((a, b) => a + b);
+    setListingInnerHtml(productsHtml);
 }
 
 function displayProductsNotFoundMessage() {
-    const listingElement = document.querySelector("#listing");
-    listingElement.innerHTML = `<p id="products-not-found">Nie znaleziono produktów o podanych parametrach</p>`;
+    const noProductsFoundMessage = `<p id="products-not-found">Nie znaleziono produktów o podanych parametrach</p>`;
+    setListingInnerHtml(noProductsFoundMessage);
 }
 
 function isPriceRangeValid(min, max) {
@@ -84,14 +88,16 @@ function getAllTagsFromProducts() {
     );
 }
 
-function insertTagCheckboxes() {
+function initializeTagCheckboxes() {
     const tags = getAllTagsFromProducts();
-    const tagsHtml = tags.map(tag => renderTagCheckbox(tag));
-    const tagListElement = document.getElementById("tagList");
-    tagListElement.innerHTML += tagsHtml.reduce((a, b) => a + b);
+    const tagsHtml = tags
+        .map(tag => renderTagCheckbox(tag))
+        .reduce((a, b) => a + b);
+
+    document.getElementById("tagList").innerHTML = tagsHtml;
 }
 
-function applyUserPreferences() {
+function applyFilterPreferencesAndDisplayResult() {
     const rawProductList = getProductListDeprecated().products;
     const filteredProductList = filterProductList(rawProductList);
     const sortedProductList = sortProductList(filteredProductList);
@@ -106,16 +112,17 @@ function applyUserPreferences() {
 
 function addEventListeners() {
     ["min-price", "max-price", "search-input", "sort-dropdown"]
-        .forEach((id) => document.getElementById(id).addEventListener('input', applyUserPreferences));
+        .forEach((id) => document.getElementById(id).addEventListener('input', applyFilterPreferencesAndDisplayResult));
 
     const tagElements = document.getElementsByClassName("tagCheckbox");
     for (const tagElement of tagElements) {
-        tagElement.addEventListener('input', applyUserPreferences);
+        tagElement.addEventListener('input', applyFilterPreferencesAndDisplayResult);
     }
 };
 
 getProductList().then(response => {
     addProductsToListing(response.products);
-    insertTagCheckboxes();
+    initializeTagCheckboxes();
     addEventListeners();
+    applyFilterPreferencesAndDisplayResult();
 });
