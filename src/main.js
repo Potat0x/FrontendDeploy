@@ -2,13 +2,8 @@ function setListingInnerHtml(innerHtml) {
     document.getElementById("listing").innerHTML = innerHtml;
 }
 
-function clearProductListing() {
-    setListingInnerHtml("");
-}
-
-function addProductsToListing(products) {
-    const productsHtml = products
-        .map((product) => renderProduct(product))
+function setProductsOnListing(products) {
+    const productsHtml = products.map((product) => renderProduct(product))
         .reduce((a, b) => a + b);
     setListingInnerHtml(productsHtml);
 }
@@ -81,15 +76,14 @@ function getSelectedTags() {
 
 function getAllTagsFromProducts() {
     return Array.from(
-        new Set(getProductListDeprecated().products
-            .map((product) => product.tags)
+        new Set(getProductList().map((product) => product.tags)
             .reduce((a, b) => a.concat(b))
             .map((tag) => tag.name))
     );
 }
 
-function initializeTagCheckboxes() {
-    const tags = getAllTagsFromProducts();
+function displayTagsCheckboxes() {
+    const tags = getAllTagsFromProducts(getProductList());
     const tagsHtml = tags
         .map(tag => renderTagCheckbox(tag))
         .reduce((a, b) => a + b);
@@ -98,31 +92,37 @@ function initializeTagCheckboxes() {
 }
 
 function applyFilterPreferencesAndDisplayResult() {
-    const rawProductList = getProductListDeprecated().products;
+    const rawProductList = getProductList();
     const filteredProductList = filterProductList(rawProductList);
     const sortedProductList = sortProductList(filteredProductList);
 
-    clearProductListing();
     if (sortedProductList.length > 0) {
-        addProductsToListing(sortedProductList);
+        setProductsOnListing(sortedProductList);
     } else {
         displayProductsNotFoundMessage();
     }
 }
 
-function addEventListeners() {
+function addEventListenersToSearchForm() {
     ["min-price", "max-price", "search-input", "sort-dropdown"]
         .forEach((id) => document.getElementById(id).addEventListener('input', applyFilterPreferencesAndDisplayResult));
+    document.getElementById("search-button").addEventListener("click", fetchAndDisplayProductsIncludingFiltering);
+}
 
+function addEventListenersToTagCheckboxes() {
     const tagElements = document.getElementsByClassName("tagCheckbox");
     for (const tagElement of tagElements) {
         tagElement.addEventListener('input', applyFilterPreferencesAndDisplayResult);
     }
-};
+}
 
-getProductList().then(response => {
-    addProductsToListing(response.products);
-    initializeTagCheckboxes();
-    addEventListeners();
-    applyFilterPreferencesAndDisplayResult();
-});
+function fetchAndDisplayProductsIncludingFiltering() {
+    fetchProducts().then(response => {
+        displayTagsCheckboxes();
+        addEventListenersToTagCheckboxes();
+        applyFilterPreferencesAndDisplayResult();
+    });
+}
+
+addEventListenersToSearchForm();
+fetchAndDisplayProductsIncludingFiltering();

@@ -1,6 +1,9 @@
-function getProductList() {
-    // const url = "https://sampletext897123.herokuapp.com/products";
-    return Promise.resolve(getProductListDeprecated());
+var fetchedProducts = {};
+
+function fetchProducts() {
+    // const url = "127.0.0.1:8081/products";
+    const url = "https://sampletext897123.herokuapp.com/products";
+    // return Promise.resolve(getProductListDeprecated());
     return fetch(url)
         .then(response => {
             console.log(response);
@@ -8,11 +11,16 @@ function getProductList() {
         })
         .then(json => {
             console.log(json);
+            fetchedProducts = json.products;
             return json;
         })
         .catch(err => {
             console.error(err);
         });
+}
+
+function getProductList() {
+    return fetchedProducts;
 }
 
 function getProductListDeprecated() {
