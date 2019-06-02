@@ -77,7 +77,7 @@ function getSelectedTags() {
 function getAllTagsFromProducts() {
     return Array.from(
         new Set(getProductList().map((product) => product.tags)
-            .reduce((a, b) => a.concat(b))
+            .reduce((a, b) => a.concat(b), [])
             .map((tag) => tag.name))
     );
 }
@@ -86,7 +86,7 @@ function displayTagsCheckboxes() {
     const tags = getAllTagsFromProducts(getProductList());
     const tagsHtml = tags
         .map(tag => renderTagCheckbox(tag))
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b, "");
 
     document.getElementById("tagList").innerHTML = tagsHtml;
 }
